@@ -24,4 +24,12 @@ public class MainClassTest {
         Assert.assertTrue("Method getClassNumber returns value less than threshold " + threshold,
                 actual > threshold);
     }
+
+    @Test
+    public void testGetClassString() {
+        String expected = "Hello";
+        String actual = mainClass.getClassString();
+        Assert.assertTrue("Method getClassString returns string without expected words: " + expected + " or " +
+                        expected.toLowerCase(),actual.contains(expected) || actual.contains(expected.toLowerCase()));
+    }
 }
