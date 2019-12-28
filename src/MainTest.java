@@ -1,10 +1,13 @@
 import org.junit.Test;
 
-public class MainTest
-{
+public class MainTest extends CoreTestCase {
     @Test
-    public void myFirstTest()
-    {
-        System.out.println("Hello, QA engineers!");
+    public void myFirstTest() {
+
+    }
+
+    @Test
+    public void mySecondTest() {
+
     }
 }
