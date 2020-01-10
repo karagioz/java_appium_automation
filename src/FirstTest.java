@@ -111,6 +111,22 @@ public class FirstTest {
         Assert.assertEquals("Unexpected article title", "Java (programming language)", articleTitle);
     }
 
+    @Test
+    public void testCheckHint() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        waitForElementAndCheckText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Can't find search input",
+                3);
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
