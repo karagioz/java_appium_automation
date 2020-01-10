@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -125,6 +126,40 @@ public class FirstTest {
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
                 "Can't find search input",
                 3);
+    }
+
+    @Test
+    public void testSearchCheckAndCancel() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Python",
+                "Can't find search input",
+                3);
+        WebElement searchResults = waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']"),
+                "Can't find search results",
+                10);
+        List<WebElement> articles = searchResults.findElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        Assert.assertTrue("Search results do not contain any articles", articles.size() > 0);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Can't find close search button",
+                3);
+        boolean areSearchResultsCleared = waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']"),
+                "Search results are still present on the page",
+                3
+        );
+        Assert.assertTrue("Search results still present on the page", areSearchResultsCleared);
     }
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
