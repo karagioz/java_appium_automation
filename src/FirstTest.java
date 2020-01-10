@@ -130,25 +130,7 @@ public class FirstTest {
 
     @Test
     public void testSearchCheckAndCancel() {
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Skip')]"),
-                "Can't find Skip button",
-                3);
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Can't find search element",
-                3);
-        waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
-                "Python",
-                "Can't find search input",
-                3);
-        WebElement searchResults = waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']"),
-                "Can't find search results",
-                10);
-        List<WebElement> articles = searchResults.findElements(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        List<WebElement> articles = searchForValueAndReturnResults("Python");
         Assert.assertTrue("Search results do not contain any articles", articles.size() > 0);
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
@@ -160,6 +142,19 @@ public class FirstTest {
                 3
         );
         Assert.assertTrue("Search results still present on the page", areSearchResultsCleared);
+    }
+
+    @Test
+    public void testCheckKeyWordInSearchResults() {
+        String keyWord = "Python";
+        List<WebElement> articles = searchForValueAndReturnResults(keyWord);
+        Assert.assertTrue("Search results do not contain any articles", articles.size() > 0);
+        for (WebElement article: articles) {
+            String articleTitle = article.getAttribute("text");
+            Assert.assertTrue(
+                    "Article title doesn't contain the search keyword",
+                    articleTitle.contains(keyWord));
+        }
     }
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
@@ -202,5 +197,28 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, errorMessage, timeOutInSeconds);
         String elementText = element.getAttribute("text");
         Assert.assertEquals("Unexpected text in element", "Search Wikipedia", elementText);
+    }
+
+    private List<WebElement> searchForValueAndReturnResults(String value) {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Python",
+                "Can't find search input",
+                3);
+        WebElement searchResults = waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']"),
+                "Can't find search results",
+                10);
+        List<WebElement> articles = searchResults.findElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        return articles;
     }
 }
