@@ -146,4 +146,10 @@ public class FirstTest {
         element.clear();
         return element;
     }
+
+    private void waitForElementAndCheckText(By by, String errorMessage, long timeOutInSeconds) {
+        WebElement element = waitForElementPresent(by, errorMessage, timeOutInSeconds);
+        String elementText = element.getAttribute("text");
+        Assert.assertEquals("Unexpected text in element", "Search Wikipedia", elementText);
+    }
 }
