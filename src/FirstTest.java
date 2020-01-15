@@ -1,16 +1,21 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 
 public class FirstTest {
@@ -110,6 +115,36 @@ public class FirstTest {
                 15);
         String articleTitle = titleElement.getAttribute("content-desc");
         Assert.assertEquals("Unexpected article title", "Java (programming language)", articleTitle);
+    }
+    
+    @Test
+    public void testSwipeArticle() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                "Java",
+                "Can't find search input",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Object-oriented programming language']"),
+                "Can't find 'Object-oriented programming language' topic searching by 'Java'",
+                10);
+        waitForElementPresent(
+                By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
+                "Can't find article title",
+                15);
+        swipeUp(2);
+        swipeUp(2);
+        swipeUp(2);
+        swipeUp(2);
+        swipeUp(2);
     }
 
     @Test
@@ -220,5 +255,15 @@ public class FirstTest {
         List<WebElement> articles = searchResults.findElements(
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
         return articles;
+    }
+
+    protected void swipeUp(int timeOfSwipe) {
+        TouchAction action = new TouchAction(driver);
+        Dimension size = driver.manage().window().getSize();
+        int x = size.width / 2;
+        int start_y = (int) (size.height * 0.8);
+        int end_y = (int) (size.height * 0.2);
+        action.press(PointOption.point(x, start_y)).waitAction(WaitOptions.waitOptions(Duration.ofSeconds(timeOfSwipe))).
+                moveTo(PointOption.point(x, end_y)).release().perform();
     }
 }
