@@ -400,6 +400,98 @@ public class FirstTest {
                 5);
     }
 
+    @Test
+    public void saveTwoArticlesAndRemoveOneOfThem() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        String searchLine = "Python";
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                searchLine,
+                "Can't find search input",
+                3);
+        String firstArticleTitle = "Python (programming language)";
+        String secondArticleTitle = "Python syntax and semantics";
+        String xpathValue = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='%s']";
+        String xpathFirst = String.format(xpathValue, firstArticleTitle);
+        String xpathSecond = String.format(xpathValue, secondArticleTitle);
+        waitForElementAndClick(
+                By.xpath(xpathFirst),
+                "Can't find article in search results: " + firstArticleTitle,
+                10);
+        waitForElementPresent(
+                By.xpath("//android.view.View[@content-desc='" + firstArticleTitle + "']"),
+                "Can't find article title: " + firstArticleTitle,
+                10);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Can't find button 'Add article to list'",
+                3);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Can't find GOT IT",
+                3);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_title"),
+                "Can't find 'Saved' reading list",
+                3);
+        ((AndroidDriver)driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        waitForElementAndClick(
+                By.xpath(xpathSecond),
+                "Can't find article in search results: " + secondArticleTitle,
+                10);
+        waitForElementPresent(
+                By.xpath("//android.view.View[@content-desc='" + secondArticleTitle + "']"),
+                "Can't find article title: " + secondArticleTitle,
+                10);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Can't find button 'Add article to list'",
+                3);
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_title"),
+                "Can't find 'Saved' reading list",
+                3);
+        ((AndroidDriver)driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        waitForElementAndClick(
+                By.className("android.widget.ImageButton"),
+                "Can't find Back button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='android:id/button2']"),
+                "Can't find 'No thanks' button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc=\"My lists\"]/android.widget.ImageView"),
+                "Can't find 'My lists' button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[@text='Saved']"),
+                "Can't find 'Saved' reading list",
+                3);
+        swipeElementToLeft(
+                By.xpath("//*[@text='" + firstArticleTitle + "']"),
+                "Can't find first saved article in reading list");
+        waitForElementNotPresent(
+                By.xpath("//*[@text='" + firstArticleTitle + "']"),
+                "First article was not deleted",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + secondArticleTitle + "']"),
+                "Second article not present",
+                3);
+        waitForElementPresent(
+                By.xpath("//android.view.View[@content-desc='" + secondArticleTitle + "']"),
+                "Can't find article title: " + secondArticleTitle,
+                10);
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
