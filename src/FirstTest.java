@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -327,6 +328,51 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testChangeScreenOrientationOnSearchResults() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        String searchLine = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                searchLine,
+                "Can't find search input",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Object-oriented programming language']"),
+                "Can't find 'Object-oriented programming language'",
+                10);
+        String titleBeforeRotation = waitForElementAndGetAttribute(
+                By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
+                "content-desc",
+                "Can't find title of article",
+                5);
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        String titleAfterRotation = waitForElementAndGetAttribute(
+                By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
+                "content-desc",
+                "Can't find title of article",
+                5);
+        Assert.assertEquals("Article title have been changed after rotation",
+                titleBeforeRotation,
+                titleAfterRotation);
+        driver.rotate(ScreenOrientation.PORTRAIT);
+        String titleAfterSecondRotation = waitForElementAndGetAttribute(
+                By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
+                "content-desc",
+                "Can't find title of article",
+                5);
+        Assert.assertEquals("Article title have been changed after second rotation",
+                titleBeforeRotation,
+                titleAfterSecondRotation);
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
@@ -451,4 +497,8 @@ public class FirstTest {
         }
     }
 
+    private String waitForElementAndGetAttribute(By by, String attribute, String errorMessage, long timeOutInSeconds) {
+        WebElement element = waitForElementPresent(by, errorMessage, timeOutInSeconds);
+        return element.getAttribute(attribute);
+    }
 }
