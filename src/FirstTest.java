@@ -9,10 +9,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -651,7 +648,7 @@ public class FirstTest {
 
     private void assertElementPresent(By by, String errorMessage) {
         try {
-            WebElement element = driver.findElement(by);
+            driver.findElement(by);
         } catch (NoSuchElementException e) {
             String defaultMessage = "An element '" + by.toString() + "' supposed to be present.\n";
             throw new AssertionError(defaultMessage + " " + errorMessage);
