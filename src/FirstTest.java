@@ -349,22 +349,25 @@ public class FirstTest {
                 By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
                 "content-desc",
                 "Can't find title of article",
-                5);
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-        String titleAfterRotation = waitForElementAndGetAttribute(
-                By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
-                "content-desc",
-                "Can't find title of article",
-                5);
-        Assert.assertEquals("Article title have been changed after rotation",
-                titleBeforeRotation,
-                titleAfterRotation);
-        driver.rotate(ScreenOrientation.PORTRAIT);
+                15);
+        try {
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+            String titleAfterRotation = waitForElementAndGetAttribute(
+                    By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
+                    "content-desc",
+                    "Can't find title of article",
+                    15);
+            Assert.assertEquals("Article title have been changed after rotation",
+                    titleBeforeRotation,
+                    titleAfterRotation + "bbb");
+        } finally {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        }
         String titleAfterSecondRotation = waitForElementAndGetAttribute(
                 By.xpath("//android.view.View[@content-desc=\"Java (programming language)\"]"),
                 "content-desc",
                 "Can't find title of article",
-                5);
+                15);
         Assert.assertEquals("Article title have been changed after second rotation",
                 titleBeforeRotation,
                 titleAfterSecondRotation);
