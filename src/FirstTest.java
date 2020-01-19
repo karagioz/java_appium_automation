@@ -492,6 +492,34 @@ public class FirstTest {
                 10);
     }
 
+    @Test
+    public void testAssertArticleHasTitle() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        String searchLine = "Python";
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                searchLine,
+                "Can't find search input",
+                3);
+        String articleTitle = "Python (programming language)";
+        String xpathValue = String.format("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='%s']",
+                articleTitle);
+        waitForElementAndClick(
+                By.xpath(xpathValue),
+                "Can't find article in search results: " + articleTitle,
+                10);
+        assertElementPresent(
+                By.xpath("//android.view.View[@content-desc='" + articleTitle + "']"),
+                "Article title not present");
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
@@ -619,5 +647,14 @@ public class FirstTest {
     private String waitForElementAndGetAttribute(By by, String attribute, String errorMessage, long timeOutInSeconds) {
         WebElement element = waitForElementPresent(by, errorMessage, timeOutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private void assertElementPresent(By by, String errorMessage) {
+        try {
+            WebElement element = driver.findElement(by);
+        } catch (NoSuchElementException e) {
+            String defaultMessage = "An element '" + by.toString() + "' supposed to be present.\n";
+            throw new AssertionError(defaultMessage + " " + errorMessage);
+        }
     }
 }
