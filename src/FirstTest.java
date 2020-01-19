@@ -373,6 +373,33 @@ public class FirstTest {
                 titleAfterSecondRotation);
     }
 
+    @Test
+    public void testCheckSearchArticleInBackground() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Skip')]"),
+                "Can't find Skip button",
+                3);
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find search element",
+                3);
+        String searchLine = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                searchLine,
+                "Can't find search input",
+                3);
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Object-oriented programming language']"),
+                "Can't find 'Object-oriented programming language'",
+                5);
+        driver.runAppInBackground(Duration.ofSeconds(2));
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Object-oriented programming language']"),
+                "Can't find article after returning from background",
+                5);
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(errorMessage + "\n");
