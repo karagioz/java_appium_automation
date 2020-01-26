@@ -32,6 +32,7 @@ public class CoreTestCase extends TestCase {
                     "/Users/Karagioz/IdeaProjects/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL(AppiumUrl), capabilities);
+        this.rotateScreenPortrait();
     }
 
     @Override

@@ -17,15 +17,12 @@ public class ChangeAppConditionTests extends CoreTestCase {
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
         String expectedArticleTitle = "Java (programming language)";
         String titleBeforeRotation = ArticlePageObject.getArticleTitle(expectedArticleTitle);
-        try {
-            this.rotateScreenLandscape();
-            String titleAfterRotation = ArticlePageObject.getArticleTitle(expectedArticleTitle);
-            assertEquals("Article title have been changed after rotation",
-                    titleBeforeRotation,
-                    titleAfterRotation);
-        } finally {
-            this.rotateScreenPortrait();
-        }
+        this.rotateScreenLandscape();
+        String titleAfterRotation = ArticlePageObject.getArticleTitle(expectedArticleTitle);
+        assertEquals("Article title have been changed after rotation",
+                titleBeforeRotation,
+                titleAfterRotation);
+        this.rotateScreenPortrait();
         String titleAfterSecondRotation = ArticlePageObject.getArticleTitle(expectedArticleTitle);
         assertEquals("Article title have been changed after second rotation",
                 titleBeforeRotation,
