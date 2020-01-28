@@ -5,7 +5,9 @@ import lib.ui.SearchPageObject;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchTests extends CoreTestCase {
 
@@ -81,6 +83,22 @@ public class SearchTests extends CoreTestCase {
             assertTrue(
                     "Article title doesn't contain the search keyword",
                     articleTitle.contains(searchLine));
+        }
+    }
+
+    @Test
+    public void testSearchByTitleAndDescription() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        String searchLine = "Java";
+        Map<String, String> articles = new HashMap<String, String>();
+        articles.put("Java", "Island of Indonesia");
+        articles.put("Java (programming language)", "Object-oriented programming language");
+        articles.put("JavaScript", "Programming language");
+        SearchPageObject.typeSearchLine(searchLine);
+        for ( String title : articles.keySet() ) {
+            String description = articles.get(title);
+            SearchPageObject.waitForElementByTitleAndDescription(title, description);
         }
     }
 }

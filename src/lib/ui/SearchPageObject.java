@@ -13,6 +13,7 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_INPUT = "//*[@resource-id='org.wikipedia:id/search_src_text']",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{SUBSTRING}']",
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[android.widget.TextView[@text='{TITLE}'] and android.widget.TextView[@text='{DESCRIPTION}']]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
             SKIP_ELEMENT = "//*[contains(@text, 'Skip')]";
@@ -25,6 +26,10 @@ public class SearchPageObject extends MainPageObject{
     /* TEMPLATES METHODS */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementByTitleAndDescription(String title, String description) {
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}", title).replace("{DESCRIPTION}", description);
     }
     /* TEMPLATES METHODS */
 
@@ -108,5 +113,11 @@ public class SearchPageObject extends MainPageObject{
                 By.xpath(SKIP_ELEMENT),
                 "Can't find Skip button",
                 3);
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String searchResultXpath = getResultSearchElementByTitleAndDescription(title, description);
+        this.waitForElementPresent(By.xpath(searchResultXpath),
+                "Can't find search result with title '" + title + "' and description '" + description + "'");
     }
 }
