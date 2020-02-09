@@ -2,11 +2,11 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class MyListsPageObject extends MainPageObject {
+abstract public class MyListsPageObject extends MainPageObject {
 
-    public static final String
-            SAVED_LIST = "xpath://*[@text='Saved']",
-            ARTICLE_TITLE_TPL = "xpath://*[@text='{TITLE}']";
+    protected static String
+            SAVED_LIST,
+            ARTICLE_TITLE_TPL;
 
     public MyListsPageObject(AppiumDriver driver) {
         super(driver);

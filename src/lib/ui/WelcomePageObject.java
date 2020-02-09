@@ -5,12 +5,13 @@ import io.appium.java_client.AppiumDriver;
 public class WelcomePageObject extends MainPageObject{
 
     private static final String
-        STEP_LEARN_MORE_LINK = "xpath://XCUIElementTypeStaticText[@name=\"Learn more about Wikipedia\"]",
+        STEP_LEARN_MORE_LINK = "xpath://XCUIElementTypeStaticText[@name='Learn more about Wikipedia'']",
         STEP_NEW_WAYS_TO_EXPLORE_TEXT = "id:New ways to explore",
-        STEP_ADD_OR_EDIT_PREFERRED_LANG_TEXT = "xpath://XCUIElementTypeStaticText[@name=\"Add or edit preferred languages\"]",
-        STEP_LEAR_MORE_ABOUT_DATA_COLLECTED_TEXT = "xpath://XCUIElementTypeStaticText[@name=\"Learn more about data collected\"]",
-        NEXT_BUTTON = "xpath://XCUIElementTypeButton[@name=\"Next\"]",
-        GET_STARTED_BUTTON = "xpath://XCUIElementTypeButton[@name=\"Get started\"]";
+        STEP_ADD_OR_EDIT_PREFERRED_LANG_TEXT = "xpath://XCUIElementTypeStaticText[@name='Add or edit preferred languages']",
+        STEP_LEAR_MORE_ABOUT_DATA_COLLECTED_TEXT = "xpath://XCUIElementTypeStaticText[@name='Learn more about data collected']",
+        NEXT_BUTTON = "xpath://XCUIElementTypeButton[@name='Next']",
+        GET_STARTED_BUTTON = "xpath://XCUIElementTypeButton[@name='Get started']",
+        SKIP_ELEMENT = "xpath://XCUIElementTypeButton[@name='Skip']";
 
     public WelcomePageObject(AppiumDriver driver) {
         super(driver);
@@ -44,5 +45,10 @@ public class WelcomePageObject extends MainPageObject{
     public void clickGetStartedButton() {
         this.waitForElementAndClick(GET_STARTED_BUTTON,
                 "Can't find 'Get started' button", 10);
+    }
+
+    public void clickSkip() {
+        this.waitForElementAndClick(SKIP_ELEMENT,
+                "Can't find Skip button", 3);
     }
 }

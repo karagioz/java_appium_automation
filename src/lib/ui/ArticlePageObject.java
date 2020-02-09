@@ -4,17 +4,19 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
-    private static final String
-            ARTICLE_TITLE_ELEMENT_TPL = "xpath://android.view.View[@content-desc=\"{SUBSTRING}\"]",
-            FOOTER_ELEMENT = "id:org.wikipedia:id/page_external_link",
-            ADD_ARTICLE_BUTTON = "id:org.wikipedia:id/article_menu_bookmark",
-            GOT_IT_BUTTON = "id:org.wikipedia:id/onboarding_button",
-            SAVED_READING_LIST_TITLE = "id:org.wikipedia:id/item_title",
-            NO_THANKS_BUTTON = "xpath://*[@resource-id='android:id/button2']";
+    protected static String
+            ARTICLE_TITLE_ELEMENT_TPL,
+            FOOTER_ELEMENT,
+            ADD_ARTICLE_BUTTON,
+            GOT_IT_BUTTON,
+            SAVED_READING_LIST_TITLE,
+            NO_THANKS_BUTTON,
+            BACK_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -33,7 +35,12 @@ public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle(String title) {
         WebElement titleElement = this.waitForTitleElement(title);
-        return titleElement.getAttribute("content-desc");
+        if (Platform.getInstance().isAndroid()) {
+            return titleElement.getAttribute("content-desc");
+        } else {
+            return titleElement.getAttribute("name");
+        }
+
     }
 
     public void assertArticleHasTitle(String title) {
@@ -42,10 +49,18 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT,
-                "Cannot find the end of the article",
-                20);
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of the article",
+                    40);
+        } else {
+            this.swipeUpTillElementAppear(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of the article",
+                    40);
+        }
+
     }
 
     public void addArticleToSavedListFirstTime() {
@@ -71,6 +86,13 @@ public class ArticlePageObject extends MainPageObject {
         this.waitForElementAndClick(
                 SAVED_READING_LIST_TITLE,
                 "Can't find 'Saved' reading list",
+                3);
+    }
+
+    public void addArticleToMySavedIOS() {
+        this.waitForElementAndClick(
+                ADD_ARTICLE_BUTTON,
+                "Can't find button 'Save for later'",
                 3);
     }
 

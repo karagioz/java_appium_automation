@@ -43,6 +43,7 @@ public class MainPageObject {
 
     public WebElement waitForElementAndSendKeys(String locator, String value, String errorMessage, long timeOutInSeconds) {
         WebElement element = waitForElementPresent(locator, errorMessage, timeOutInSeconds);
+        element.click();
         element.sendKeys(value);
         return element;
     }
@@ -98,6 +99,25 @@ public class MainPageObject {
             swipeUpQuick();
             alreadySwiped ++;
         }
+    }
+
+    public void swipeUpTillElementAppear(String locator, String errorMessage, int maxSwipes) {
+        int alreadySwiped = 0;
+        while (!this.isElementLocatedOnTheScreen(locator)) {
+            if (alreadySwiped > maxSwipes) {
+                Assert.assertTrue(errorMessage, this.isElementLocatedOnTheScreen(locator));
+            }
+            swipeUpQuick();
+            alreadySwiped ++;
+        }
+    }
+
+    public boolean isElementLocatedOnTheScreen(String locator) {
+        int elementLocationByY = this.waitForElementPresent(locator, "Can't find element by locator", 3).
+                getLocation().
+                getY();
+        int screenSizeByY = driver.manage().window().getSize().getHeight();
+        return elementLocationByY < screenSizeByY;
     }
 
     public void swipeElementToLeft(String locator, String errorMessage) {
