@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
 abstract public class MyListsPageObject extends MainPageObject {
 
@@ -19,10 +20,12 @@ abstract public class MyListsPageObject extends MainPageObject {
     /* TEMPLATES METHODS */
 
     public void openSavedFolder() {
-        this.waitForElementAndClick(
-                SAVED_LIST,
-                "Can't find 'Saved' reading list",
-                3);
+        if (Platform.getInstance().isAndroid()) {
+            this.waitForElementAndClick(
+                    SAVED_LIST,
+                    "Can't find 'Saved' reading list",
+                    3);
+        }
     }
 
     public void swipeByArticleToDelete(String title) {
@@ -31,6 +34,10 @@ abstract public class MyListsPageObject extends MainPageObject {
         this.swipeElementToLeft(
                 articleXpath,
                 "Can't find saved article in reading list");
+        if (Platform.getInstance().isIOS()) {
+            this.clickElementToTheRightUpperCorner(articleXpath,
+                    "Can't find saved article in reading list");
+        }
         waitForArticleToDisappearByTitle(title);
     }
 
@@ -47,7 +54,7 @@ abstract public class MyListsPageObject extends MainPageObject {
         this.waitForElementPresent(
                 articleXpath,
                 "Saved article not present in the list: " + articleXpath,
-                5);
+                15);
     }
 
     public void openArticleFromListByTitle(String title) {

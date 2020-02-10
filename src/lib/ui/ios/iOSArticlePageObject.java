@@ -10,6 +10,7 @@ public class iOSArticlePageObject extends ArticlePageObject {
         FOOTER_ELEMENT = "id:Official website";
         ADD_ARTICLE_BUTTON = "id:Save for later";
         BACK_BUTTON = "id:Back";
+        CANCEL_BUTTON = "xpath://XCUIElementTypeButton[@name='Cancel']";
     }
 
     public iOSArticlePageObject(AppiumDriver driver) {

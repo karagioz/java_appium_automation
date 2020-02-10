@@ -11,6 +11,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
         GOT_IT_BUTTON = "id:org.wikipedia:id/onboarding_button";
         SAVED_READING_LIST_TITLE = "id:org.wikipedia:id/item_title";
         NO_THANKS_BUTTON = "xpath://*[@resource-id='android:id/button2']";
+        BACK_BUTTON = "class:android.widget.ImageButton";
     }
 
     public AndroidArticlePageObject(AppiumDriver driver) {

@@ -16,7 +16,8 @@ abstract public class ArticlePageObject extends MainPageObject {
             GOT_IT_BUTTON,
             SAVED_READING_LIST_TITLE,
             NO_THANKS_BUTTON,
-            BACK_BUTTON;
+            BACK_BUTTON,
+            CANCEL_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -97,14 +98,23 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void closeArticle() {
-        ((AndroidDriver)driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        if (Platform.getInstance().isAndroid()) {
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        }
         this.waitForElementAndClick(
-                "class:android.widget.ImageButton",
+                BACK_BUTTON,
                 "Can't find Back button",
                 3);
-        this.waitForElementAndClick(
-                NO_THANKS_BUTTON,
-                "Can't find 'No thanks' button",
-                3);
+        if (Platform.getInstance().isAndroid()) {
+            this.waitForElementAndClick(
+                    NO_THANKS_BUTTON,
+                    "Can't find 'No thanks' button",
+                    3);
+        } else {
+            this.waitForElementAndClick(
+                    CANCEL_BUTTON,
+                    "Can't find 'Cancel' button",
+                    3);
+        }
     }
 }
