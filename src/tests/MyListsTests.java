@@ -48,12 +48,20 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring(firstArticleTitle);
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement(firstArticleTitle);
-        ArticlePageObject.addArticleToSavedListFirstTime();
-        this.appPressBackButton();
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToSavedListFirstTime();
+        } else {
+            ArticlePageObject.addArticleToMySavedIOS();
+        }
+        ArticlePageObject.backFromArticleToSearchResults();
         SearchPageObject.clickByArticleWithSubstring(secondArticleTitle);
         ArticlePageObject.waitForTitleElement(secondArticleTitle);
-        ArticlePageObject.addArticleToSavedListNotFirstTime();
-        this.appPressBackButton();
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToSavedListNotFirstTime();
+            this.appPressBackButton();
+        } else {
+            ArticlePageObject.addArticleToMySavedIOS();
+        }
         ArticlePageObject.closeArticle();
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();

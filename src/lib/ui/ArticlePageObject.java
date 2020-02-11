@@ -31,7 +31,7 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     public WebElement waitForTitleElement(String title) {
         String titleXpath = getTitleElementXpath(title);
-        return this.waitForElementPresent(titleXpath, "Can't find article title", 15);
+        return this.waitForElementPresent(titleXpath, "Can't find article title " + titleXpath, 15);
     }
 
     public String getArticleTitle(String title) {
@@ -114,6 +114,17 @@ abstract public class ArticlePageObject extends MainPageObject {
             this.waitForElementAndClick(
                     CANCEL_BUTTON,
                     "Can't find 'Cancel' button",
+                    3);
+        }
+    }
+
+    public void backFromArticleToSearchResults() {
+        if (Platform.getInstance().isAndroid()) {
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        } else {
+            this.waitForElementAndClick(
+                    BACK_BUTTON,
+                    "Can't find Back button",
                     3);
         }
     }
