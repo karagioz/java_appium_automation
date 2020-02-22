@@ -8,9 +8,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.URL;
 
 public class Platform {
-    private static final String PLATFROM_IOS = "ios";
-    private static final String PLATFROM_ANDROID = "android";
-    private static final String PLATFROM_MOBILE_WEB = "mobile_web";
+    private static final String PLATFORM_IDS = "ios";
+    private static final String PLATFORM_ANDROID = "android";
+    private static final String PLATFORMS_MOBILE_WEB = "mobile_web";
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
 
     private static Platform instance;
@@ -34,14 +34,14 @@ public class Platform {
     }
 
     public boolean isAndroid() {
-        return isPlatform(PLATFROM_ANDROID);
+        return isPlatform(PLATFORM_ANDROID);
     }
 
     public boolean isIOS() {
-        return isPlatform(PLATFROM_IOS);
+        return isPlatform(PLATFORM_IDS);
     }
 
-    public boolean isMW() { return isPlatform(PLATFROM_MOBILE_WEB); }
+    public boolean isMW() { return isPlatform(PLATFORMS_MOBILE_WEB); }
 
     private DesiredCapabilities getAndroidDesiredCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
