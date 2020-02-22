@@ -7,7 +7,8 @@ abstract public class MyListsPageObject extends MainPageObject {
 
     protected static String
             SAVED_LIST,
-            ARTICLE_TITLE_TPL;
+            ARTICLE_TITLE_TPL,
+            REMOVE_FROM_SAVED_BUTTON_TPL;
 
     public MyListsPageObject(RemoteWebDriver driver) {
         super(driver);
@@ -16,6 +17,10 @@ abstract public class MyListsPageObject extends MainPageObject {
     /* TEMPLATES METHODS */
     private static String getArticleXpathByTitle(String title) {
         return ARTICLE_TITLE_TPL.replace("{TITLE}", title);
+    }
+
+    private static String getRemoveButtonByTitle(String title) {
+        return REMOVE_FROM_SAVED_BUTTON_TPL.replace("{TITLE}", title);
     }
     /* TEMPLATES METHODS */
 
@@ -31,12 +36,21 @@ abstract public class MyListsPageObject extends MainPageObject {
     public void swipeByArticleToDelete(String title) {
         String articleXpath = getArticleXpathByTitle(title);
         waitForArticleToAppearByTitle(title);
-        this.swipeElementToLeft(
-                articleXpath,
-                "Can't find saved article in reading list");
-        if (Platform.getInstance().isIOS()) {
-            this.clickElementToTheRightUpperCorner(articleXpath,
+        if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            this.swipeElementToLeft(
+                    articleXpath,
                     "Can't find saved article in reading list");
+            if (Platform.getInstance().isIOS()) {
+                this.clickElementToTheRightUpperCorner(articleXpath,
+                        "Can't find saved article in reading list");
+            }
+        } else {
+            String removeLocator = getRemoveButtonByTitle(title);
+            this.waitForElementAndClick(
+                    removeLocator,
+                    "Can't click button to remove article from saved",
+                    10);
+            driver.navigate().refresh();
         }
         waitForArticleToDisappearByTitle(title);
     }

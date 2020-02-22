@@ -13,6 +13,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             ARTICLE_TITLE_ELEMENT_TPL,
             FOOTER_ELEMENT,
             ADD_ARTICLE_BUTTON,
+            REMOVE_ARTICLE_BUTTON,
             GOT_IT_BUTTON,
             SAVED_READING_LIST_TITLE,
             NO_THANKS_BUTTON,
@@ -70,10 +71,7 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void addArticleToSavedListFirstTime() {
-        this.waitForElementAndClick(
-                ADD_ARTICLE_BUTTON,
-                "Can't find button 'Add article to list'",
-                3);
+        this.clickOnAddArticleButton();
         this.waitForElementAndClick(
                 GOT_IT_BUTTON,
                 "Can't find GOT IT",
@@ -85,10 +83,7 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void addArticleToSavedListNotFirstTime() {
-        this.waitForElementAndClick(
-                ADD_ARTICLE_BUTTON,
-                "Can't find button 'Add article to list'",
-                3);
+        this.clickOnAddArticleButton();
         this.waitForElementAndClick(
                 SAVED_READING_LIST_TITLE,
                 "Can't find 'Saved' reading list",
@@ -96,30 +91,55 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void addArticleToMySavedIOS() {
+        this.clickOnAddArticleButton();
+    }
+
+    public void clickOnAddArticleButton() {
         this.waitForElementAndClick(
                 ADD_ARTICLE_BUTTON,
                 "Can't find button 'Save for later'",
                 3);
     }
 
+    public void addArticleToMySavedMW() {
+        this.removeArticleFromSavedIfItAdded();
+        this.clickOnAddArticleButton();
+    }
+
+    public void removeArticleFromSavedIfItAdded() {
+        if (this.isElementPresent(REMOVE_ARTICLE_BUTTON)) {
+            this.waitForElementAndClick(
+                    REMOVE_ARTICLE_BUTTON,
+                    "Can't click button to remove an article from saved",
+                    1);
+            this.waitForElementPresent(
+                    ADD_ARTICLE_BUTTON,
+                    "Can't find button to add article to saved list after removing it from there");
+        }
+    }
+
     public void closeArticle() {
         if (Platform.getInstance().isAndroid()) {
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));
         }
-        this.waitForElementAndClick(
-                BACK_BUTTON,
-                "Can't find Back button",
-                3);
-        if (Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()) {
             this.waitForElementAndClick(
-                    NO_THANKS_BUTTON,
-                    "Can't find 'No thanks' button",
+                    BACK_BUTTON,
+                    "Can't find Back button",
                     3);
+            if (Platform.getInstance().isAndroid()) {
+                this.waitForElementAndClick(
+                        NO_THANKS_BUTTON,
+                        "Can't find 'No thanks' button",
+                        3);
+            } else {
+                this.waitForElementAndClick(
+                        CANCEL_BUTTON,
+                        "Can't find 'Cancel' button",
+                        3);
+            }
         } else {
-            this.waitForElementAndClick(
-                    CANCEL_BUTTON,
-                    "Can't find 'Cancel' button",
-                    3);
+            System.out.println("Method closeArticle() does nothing for platform " + Platform.getInstance().getPlatformVar());
         }
     }
 
