@@ -1,7 +1,6 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
@@ -45,8 +44,8 @@ public class MainPageObject {
     }
 
     public WebElement waitForElementAndSendKeys(String locator, String value, String errorMessage, long timeOutInSeconds) {
-        MobileElement element = (MobileElement) waitForElementPresent(locator, errorMessage, timeOutInSeconds);
-        element.setValue(value);
+        WebElement element = waitForElementPresent(locator, errorMessage, timeOutInSeconds);
+        element.sendKeys(value);
         return element;
     }
 
