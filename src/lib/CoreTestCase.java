@@ -21,6 +21,7 @@ public class CoreTestCase extends TestCase {
         driver =Platform.getInstance().getDriver();
         this.rotateScreenPortrait();
         this.skipWelcomePage();
+        this.openWikiWebPageForMobileWeb();
     }
 
     @Override
@@ -56,7 +57,20 @@ public class CoreTestCase extends TestCase {
         }
     }
 
-    protected void appPressBackButton() { ((AndroidDriver)driver).pressKey(new KeyEvent(AndroidKey.BACK));
+    protected void appPressBackButton() {
+        if (driver instanceof AppiumDriver) {
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));
+        } else {
+            System.out.println("Method appPressBackButton() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    protected void openWikiWebPageForMobileWeb() {
+        if (Platform.getInstance().isMW()) {
+            driver.get("https://en.m.wikipedia.org");
+        } else {
+            System.out.println("Method openWikiWebPageForMobileWeb() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     public void skipWelcomePage() {
