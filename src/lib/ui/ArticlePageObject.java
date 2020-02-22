@@ -146,11 +146,13 @@ abstract public class ArticlePageObject extends MainPageObject {
     public void backFromArticleToSearchResults() {
         if (Platform.getInstance().isAndroid()) {
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             this.waitForElementAndClick(
                     BACK_BUTTON,
                     "Can't find Back button",
                     3);
+        } else {
+            System.out.println("Method backFromArticleToSearchResults() does nothing for platform " + Platform.getInstance().getPlatformVar());
         }
     }
 }
