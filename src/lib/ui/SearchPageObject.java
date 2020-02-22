@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -20,9 +21,7 @@ abstract public class SearchPageObject extends MainPageObject{
 
     public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
-        if (driver instanceof AppiumDriver) {
-            this.clickOnSkip();
-        }
+        this.clickOnSkip();
     }
 
     /* TEMPLATES METHODS */
@@ -111,10 +110,14 @@ abstract public class SearchPageObject extends MainPageObject{
     }
 
     public void clickOnSkip() {
-        this.waitForElementAndClick(
-                SKIP_ELEMENT,
-                "Can't find Skip button",
-                3);
+        if (this.driver instanceof AppiumDriver) {
+            this.waitForElementAndClick(
+                    SKIP_ELEMENT,
+                    "Can't find Skip button",
+                    3);
+        } else {
+            System.out.println("Method clickOnSkip() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     public void waitForElementByTitleAndDescription(String title, String description) {

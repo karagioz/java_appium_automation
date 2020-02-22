@@ -6,7 +6,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class MWSearchPageObject extends SearchPageObject {
     static{
         SEARCH_INIT_ELEMENT = "css:button#searchIcon";
-        SEARCH_CANCEL_BUTTON = "css:button.cancel";
+        SEARCH_CANCEL_BUTTON = "css:div.header-action>button.cancel";
         SEARCH_INPUT = "css:form>input.search";
         SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://div[contains(@class, 'wikidata-description')][contains(text(), '{SUBSTRING}')]";
         SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "xpath://XCUIElementTypeLink[@name='{TITLE}\n{DESCRIPTION}']";
