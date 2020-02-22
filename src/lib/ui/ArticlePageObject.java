@@ -38,10 +38,11 @@ abstract public class ArticlePageObject extends MainPageObject {
         WebElement titleElement = this.waitForTitleElement(title);
         if (Platform.getInstance().isAndroid()) {
             return titleElement.getAttribute("content-desc");
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             return titleElement.getAttribute("name");
+        } else {
+            return titleElement.getText();
         }
-
     }
 
     public void assertArticleHasTitle(String title) {
@@ -55,13 +56,17 @@ abstract public class ArticlePageObject extends MainPageObject {
                     FOOTER_ELEMENT,
                     "Cannot find the end of the article",
                     40);
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             this.swipeUpTillElementAppear(
                     FOOTER_ELEMENT,
                     "Cannot find the end of the article",
                     40);
+        } else {
+            this.scrollWebPageTillElementNotVisible(
+                    FOOTER_ELEMENT,
+                    "Cannot find the end of the article",
+                    40);
         }
-
     }
 
     public void addArticleToSavedListFirstTime() {

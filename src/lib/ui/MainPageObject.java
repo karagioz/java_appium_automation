@@ -6,10 +6,7 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import lib.Platform;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -106,6 +103,27 @@ public class MainPageObject {
         }
     }
 
+    public void scrollWebPageUp() {
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExecutor = driver;
+            JSExecutor.executeScript("window.scrollBy(0, 250)");
+        } else {
+            System.out.println("Method scrollWebPageUp() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTillElementNotVisible(String locator, String errorMessage, int maxSwipes) {
+        int alreadySwiped = 0;
+        WebElement element = this.waitForElementPresent(locator, errorMessage);
+        while (!this.isElementLocatedOnTheScreen(locator)) {
+            this.scrollWebPageUp();
+            ++alreadySwiped;
+            if (alreadySwiped > maxSwipes) {
+                Assert.assertTrue(errorMessage, element.isDisplayed());
+            }
+        }
+    }
+
     public void swipeUpTillElementAppear(String locator, String errorMessage, int maxSwipes) {
         int alreadySwiped = 0;
         while (!this.isElementLocatedOnTheScreen(locator)) {
@@ -121,6 +139,11 @@ public class MainPageObject {
         int elementLocationByY = this.waitForElementPresent(locator, "Can't find element by locator", 3).
                 getLocation().
                 getY();
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExecutor = driver;
+            Object jsResult = JSExecutor.executeScript("return window.pageYOffset");
+            elementLocationByY -= Integer.parseInt(jsResult.toString());
+        }
         int screenSizeByY = driver.manage().window().getSize().getHeight();
         return elementLocationByY < screenSizeByY;
     }
