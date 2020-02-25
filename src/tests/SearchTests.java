@@ -93,9 +93,9 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.initSearchInput();
         String searchLine = "Java";
         Map<String, String> articles = new HashMap<>();
-        articles.put("Java", "Island of Indonesia");
-        articles.put("Java (programming language)", "Object-oriented programming language");
-        articles.put("JavaScript", "Programming language");
+        articles.put("Java", "sland of Indonesia");
+        articles.put("Java (programming language)", "bject-oriented programming language");
+        articles.put("JavaScript", "rogramming language");
         SearchPageObject.typeSearchLine(searchLine);
         for ( String title : articles.keySet() ) {
             String description = articles.get(title);
